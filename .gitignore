@@ -1,0 +1,14 @@
+.coverage
+/build/
+/docs/_build/
+/dist/
+/.eggs/
+/*.egg-info
+/l
+/local*/
+flask_secret_key
+private_notes
+service_account_creds.json
+TAGS
+*.pyc
+.DS_Store

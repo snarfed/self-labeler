@@ -1,0 +1,39 @@
+# https://cloud.google.com/appengine/docs/flexible/reference/app-yaml?tab=python
+#
+# gcloud -q app deploy --project bridgy-federated hub.yaml
+
+# application: bridgy-federated
+
+service: default
+env: flex
+runtime: python
+runtime_config:
+    operating_system: ubuntu22
+    runtime_version: "3.12"
+
+resources:
+  cpu: 1
+  memory_gb: 1.6
+
+# can't be internal because Bluesky relay(s) need to be able to connect to us
+# over websocket for subscribeRepos
+network:
+  instance_ip_mode: external
+
+env_variables:
+  PLC_HOST: plc.directory
+  APPVIEW_HOST: api.bsky.app
+  RELAY_HOST: bsky.network
+  JETSTREAM_HOST: jetstream2.us-west.bsky.network
+
+manual_scaling:
+  instances: 1
+
+liveness_check:
+  # default 300; does lowering this speed up deploy? seems like maybe, a bit?
+  # https://cloud.google.com/appengine/docs/flexible/reference/app-yaml?tab=python#liveness_checks
+  initial_delay_sec: 30
+
+# https://cloud.google.com/appengine/docs/flexible/python/runtime#application_startup
+# https://docs.gunicorn.org/en/latest/settings.html#timeout
+entrypoint: gunicorn --workers 1 --threads 50 -b :$PORT app:app
