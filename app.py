@@ -25,6 +25,17 @@ import lexrpc.flask_server
 import lexrpc.server
 import simple_websocket
 
+# https://docs.bsky.app/docs/advanced-guides/moderation#global-label-values
+GLOBAL_LABELS = [
+    '!hide',
+    '!no-unauthenticated',
+    '!warn',
+    'graphic-media',
+    'nudity',
+    'porn',
+    'sexual',
+]
+
 logger = logging.getLogger(__name__)
 logging.basicConfig()
 
@@ -64,7 +75,8 @@ def jetstream():
                 continue
 
             values = [v['val'] for v in
-                      commit['record'].get('labels', {}).get('values', [])]
+                      commit['record'].get('labels', {}).get('values', [])
+                      if v['val'] not in GLOBAL_LABELS]
             if not values:
                 continue
 
