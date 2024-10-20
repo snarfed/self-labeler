@@ -1,5 +1,8 @@
 """Self-labeler Flask app and implementation.
 
+https://atproto.com/specs/label
+https://docs.bsky.app/docs/advanced-guides/moderation#labelers
+
 Uses jetstream:
 https://github.com/bluesky-social/jetstream
 
@@ -15,6 +18,8 @@ from queue import Queue
 import threading
 from threading import Lock, Thread
 
+import arroba.util
+from cryptography.hazmat.primitives import serialization
 from flask import Flask
 import lexrpc.flask_server
 import lexrpc.server
@@ -22,6 +27,10 @@ import simple_websocket
 
 logger = logging.getLogger(__name__)
 logging.basicConfig()
+
+logger.info('Loading #atproto_label private key from privkey.atproto_label.pem')
+with open('privkey.atproto_label.pem', 'rb') as f:
+    privkey = serialization.load_pem_private_key(f.read(), password=None)
 
 # elements are Queues of lists of dict com.atproto.label.defs objects to emit
 subscribers = []
@@ -49,25 +58,36 @@ def jetstream():
         try:
             msg = json.loads(ws.receive())
             commit = msg.get('commit')
-            if (msg.get('kind') == 'commit'
-                    and commit.get('operation') in ('create', 'update')):
-                uri = f'at://{msg["did"]}/{commit["collection"]}/{commit["rkey"]}'
-                labels = [{
+
+            if (msg.get('kind') != 'commit'
+                    or commit.get('operation') not in ('create', 'update')):
+                continue
+
+            values = [v['val'] for v in
+                      commit['record'].get('labels', {}).get('values', [])]
+            if not values:
+                continue
+
+            labels = []
+            uri = f'at://{msg["did"]}/{commit["collection"]}/{commit["rkey"]}'
+            for val in values:
+                label = {
                     'ver': 1,
                     'src': msg['did'],
                     'uri': uri,
                     'cid': commit['cid'],
-                    'val': label['val'],
+                    'val': val,
                     'cts': datetime.now().isoformat(),
-                    # 'sig': , TODO
-                } for label in commit['record'].get('labels', {}).get('values', [])]
-                if labels:
-                    logger.info(f'emitting to {len(subscribers)} subscribers: {uri} {[l["val"] for l in labels]}')
-                    for sub in subscribers:
-                        sub.put({
-                            'seq': msg['time_us'],
-                            'labels': labels,
-                        })
+                }
+                arroba.util.sign(label, privkey)
+                labels.append(label)
+
+            logger.info(f'emitting to {len(subscribers)} subscribers: {uri} {labels}')
+            for sub in subscribers:
+                sub.put({
+                    'seq': msg['time_us'],
+                    'labels': labels,
+                })
 
         except simple_websocket.ConnectionClosed as cc:
             logger.info(f'reconnecting after jetstream disconnect: {cc}')

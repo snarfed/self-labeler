@@ -8,6 +8,7 @@
 /local*/
 flask_secret_key
 private_notes
+privkey.atproto_label.pem
 service_account_creds.json
 TAGS
 *.pyc
