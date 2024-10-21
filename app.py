@@ -119,7 +119,7 @@ def jetstream():
                 arroba.util.sign(label, privkey)
                 labels['labels'].append(label)
 
-            logger.info(f'emitting to {len(subscribers)} subscribers: {uri} {labels}')
+            logger.info(f'emitting {len(labels["labels"])} to {len(subscribers)} subscribers for {uri} ')
             for sub in subscribers:
                 sub.put(labels)
 
@@ -145,7 +145,8 @@ def subscribe_labels(cursor=None):
         while True:
             yield ({'op': 1, 't': '#labels'}, labels.get())
     finally:
-        subscribers.remove(labels)
+        with subscribers_lock:
+            subscribers.remove(labels)
 
 
 # must be after subscription XRPC methods are registered
