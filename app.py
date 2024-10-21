@@ -9,7 +9,7 @@ https://github.com/bluesky-social/jetstream
 Example command line:
 websocat 'wss://jetstream2.us-east.bsky.network/subscribe?wantedCollections=app.bsky.feed.post'
 """
-from datetime import datetime
+from datetime import datetime, timezone
 import json
 import logging
 import os
@@ -114,7 +114,7 @@ def jetstream():
                     'uri': uri,
                     'cid': commit['cid'],
                     'val': val,
-                    'cts': datetime.now().isoformat(),
+                    'cts': datetime.now(timezone.utc).isoformat(),
                 }
                 arroba.util.sign(label, privkey)
                 labels['labels'].append(label)
