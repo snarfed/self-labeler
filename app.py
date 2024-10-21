@@ -20,7 +20,7 @@ from threading import Lock, Thread
 
 import arroba.util
 from cryptography.hazmat.primitives import serialization
-from flask import Flask
+from flask import Flask, redirect
 from google.cloud import error_reporting
 import google.cloud.logging
 import lexrpc.flask_server
@@ -45,13 +45,14 @@ KNOWN_LABELS = [
 
 # https://cloud.google.com/appengine/docs/flexible/python/runtime#environment_variables
 PROD = 'GAE_INSTANCE' in os.environ
-
-logging_client = google.cloud.logging.Client()
-logging_client.setup_logging(log_level=logging.DEBUG)
-logger = logging.getLogger(__name__)
-
-if not PROD:
+if PROD:
+    logging_client = google.cloud.logging.Client()
+    logging_client.setup_logging(log_level=logging.DEBUG)
     error_reporting_client = error_reporting.Client()
+else:
+    logging.basicConfig()
+
+logger = logging.getLogger(__name__)
 
 logger.info('Loading #atproto_label private key from privkey.atproto_label.pem')
 with open('privkey.atproto_label.pem', 'rb') as f:
@@ -67,6 +68,12 @@ app = Flask(__name__)
 app.json.compact = False
 app_dir = Path(__file__).parent
 app.config.from_pyfile(app_dir / 'config.py')
+
+
+@app.route('/')
+def home_page():
+    """Redirect to bsky.app labeler profile."""
+    return redirect('https://bsky.app/profile/self-labeler.snarfed.org', code=302)
 
 
 # ATProto XRPC server
@@ -119,6 +126,10 @@ def jetstream():
 
         except simple_websocket.ConnectionClosed as cc:
             logger.info(f'reconnecting after jetstream disconnect: {cc}')
+
+        except BaseException as err:
+            if PROD:
+                error_reporting_client.report_error(msg=None, exception=True)
 
 
 @xrpc_server.method('com.atproto.label.subscribeLabels')
