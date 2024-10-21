@@ -67,7 +67,6 @@ subscribers_lock = Lock()
 app = Flask(__name__)
 app.json.compact = False
 app_dir = Path(__file__).parent
-app.config.from_pyfile(app_dir / 'config.py')
 
 
 @app.route('/')
