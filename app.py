@@ -50,7 +50,7 @@ if PROD:
     logging_client.setup_logging(log_level=logging.DEBUG)
     error_reporting_client = error_reporting.Client()
 else:
-    logging.basicConfig()
+    logging.basicConfig(level=logging.DEBUG)
 
 logger = logging.getLogger(__name__)
 
@@ -78,7 +78,6 @@ def home_page():
 
 # ATProto XRPC server
 xrpc_server = lexrpc.server.Server(validate=True)
-lexrpc.flask_server.init_flask(xrpc_server, app)
 
 
 def jetstream():
@@ -140,13 +139,17 @@ def subscribe_labels(cursor=None):
 
     labels = Queue()
     with subscribers_lock:
-        subscribers.append(label)
+        subscribers.append(labels)
 
     try:
         while True:
-            yield labels.get()
+            yield ({'op': 1, 't': '#labels'}, labels.get())
     finally:
         subscribers.remove(labels)
+
+
+# must be after subscription XRPC methods are registered
+lexrpc.flask_server.init_flask(xrpc_server, app)
 
 
 # start jetstream consumer
