@@ -29,6 +29,7 @@ grapheme==0.6.0
 grpc-google-iam-v1==0.13.1
 grpcio-status==1.67.0
 grpcio==1.67.0
+gunicorn==23.0.0
 h11==0.14.0
 idna==3.10
 importlib-metadata==8.4.0
@@ -40,6 +41,7 @@ MarkupSafe==3.0.2
 multiformats-config==0.3.1
 multiformats==0.3.1.post4
 opentelemetry-api==1.27.0
+packaging==24.1
 proto-plus==1.24.0
 protobuf==5.28.2
 pyasn1-modules==0.4.1

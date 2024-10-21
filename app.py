@@ -43,10 +43,9 @@ KNOWN_LABELS = [
     'bridged-from-bridgy-fed-web',
 ]
 
-logger = logging.getLogger(__name__)
-logging.basicConfig()
 logging_client = google.cloud.logging.Client()
 logging_client.setup_logging(log_level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 error_reporting_client = error_reporting.Client()
 
@@ -91,7 +90,10 @@ def jetstream():
             if not values:
                 continue
 
-            labels = []
+            labels = {
+                'seq': msg['time_us'],
+                'labels': [],
+            }
             uri = f'at://{msg["did"]}/{commit["collection"]}/{commit["rkey"]}'
             for val in values:
                 if val not in KNOWN_LABELS:
@@ -105,14 +107,11 @@ def jetstream():
                     'cts': datetime.now().isoformat(),
                 }
                 arroba.util.sign(label, privkey)
-                labels.append(label)
+                labels['labels'].append(label)
 
             logger.info(f'emitting to {len(subscribers)} subscribers: {uri} {labels}')
             for sub in subscribers:
-                sub.put({
-                    'seq': msg['time_us'],
-                    'labels': labels,
-                })
+                sub.put(labels)
 
         except simple_websocket.ConnectionClosed as cc:
             logger.info(f'reconnecting after jetstream disconnect: {cc}')
