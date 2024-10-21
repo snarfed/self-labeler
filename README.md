@@ -1,10 +1,14 @@
 # self-labeler
 
-A [Bluesky](https://bsky.social/)/[AT Protocol](https://atproto.com/)'s [labeler aka mod service](https://bsky.social/about/blog/4-13-2023-moderation) that emits custom [self-labels](https://atproto.com/specs/label#self-labels-in-records) (except [global labels](https://docs.bsky.app/docs/advanced-guides/moderation#global-label-values)) that already exist inside records.
+[bsky.app/profile/self-labeler.snarfed.org](https://bsky.app/profile/self-labeler.snarfed.org) (`did:plc:4wgmwsq4t3tg55ffl3r7ocec`)
+
+A [Bluesky](https://bsky.social/)/[AT Protocol](https://atproto.com/) [labeler aka mod service](https://bsky.social/about/blog/4-13-2023-moderation) that emits custom [self-labels](https://atproto.com/specs/label#self-labels-in-records) (except [global labels](https://docs.bsky.app/docs/advanced-guides/moderation#global-label-values)) that already exist inside records.
 
 Apart from the [global labels](https://docs.bsky.app/docs/advanced-guides/moderation#global-label-values) built into [bsky.app](https://bsky.app/), other custom self-labels are often not displayed or handled by clients. This surfaces those labels and makes them visible.
 
 [Background discussion.](https://github.com/bluesky-social/atproto/discussions/2885)
+
+License: This project is placed in the public domain. You may also use it under the [CC0 License](https://creativecommons.org/publicdomain/zero/1.0/).
 
 
 ## Setup
@@ -44,3 +48,8 @@ Apart from the [global labels](https://docs.bsky.app/docs/advanced-guides/modera
             encryption_algorithm=serialization.NoEncryption(),
         ))
     ```
+
+
+### Declaration record
+
+The [labeler declaration record](https://docs.bsky.app/docs/advanced-guides/moderation#labeler-declarations) is `at://did:plc:4wgmwsq4t3tg55ffl3r7ocec/app.bsky.labeler.service/self'. To add a new label value definition to it, run `npx @skyware/labeler add`. [Docs.](https://skyware.js.org/guides/labeler/introduction/getting-started/)

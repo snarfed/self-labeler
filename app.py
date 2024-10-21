@@ -21,6 +21,8 @@ from threading import Lock, Thread
 import arroba.util
 from cryptography.hazmat.primitives import serialization
 from flask import Flask
+from google.cloud import error_reporting
+import google.cloud.logging
 import lexrpc.flask_server
 import lexrpc.server
 import simple_websocket
@@ -36,8 +38,17 @@ GLOBAL_LABELS = [
     'sexual',
 ]
 
+KNOWN_LABELS = [
+    'bridged-from-bridgy-fed-activitypub',
+    'bridged-from-bridgy-fed-web',
+]
+
 logger = logging.getLogger(__name__)
 logging.basicConfig()
+logging_client = google.cloud.logging.Client()
+logging_client.setup_logging(log_level=logging.DEBUG)
+
+error_reporting_client = error_reporting.Client()
 
 logger.info('Loading #atproto_label private key from privkey.atproto_label.pem')
 with open('privkey.atproto_label.pem', 'rb') as f:
@@ -83,6 +94,8 @@ def jetstream():
             labels = []
             uri = f'at://{msg["did"]}/{commit["collection"]}/{commit["rkey"]}'
             for val in values:
+                if val not in KNOWN_LABELS:
+                    error_reporting_client.report(f'new label! {val} {uri} {cid}')
                 label = {
                     'ver': 1,
                     'src': msg['did'],
@@ -123,7 +136,6 @@ def subscribe_labels(cursor=None):
 
 
 # start jetstream consumer
-# if LOCAL_SERVER or not DEBUG:
 assert 'jetstream' not in [t.name for t in threading.enumerate()]
 Thread(target=jetstream, name='jetstream').start()
 
