@@ -33,9 +33,11 @@ GLOBAL_LABELS = [
     '!no-unauthenticated',
     '!warn',
     'graphic-media',
+    'gore',
     'nudity',
     'porn',
     'sexual',
+    'spam',
 ]
 
 KNOWN_LABELS = [
@@ -105,8 +107,12 @@ def jetstream():
             }
             uri = f'at://{msg["did"]}/{commit["collection"]}/{commit["rkey"]}'
             for val in values:
-                if PROD and val not in KNOWN_LABELS:
-                    error_reporting_client.report(f'new label! {val} {uri} {commit["cid"]} {msg["time_us"]}')
+                if val not in KNOWN_LABELS:
+                    log = f'new label! {val} {uri} {commit["cid"]} {msg["time_us"]}'
+                    if PROD:
+                        error_reporting_client.report(log)
+                    else:
+                        logger.warning(log)
                 label = {
                     'ver': 1,
                     'src': msg['did'],
