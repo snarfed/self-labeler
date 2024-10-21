@@ -106,7 +106,7 @@ def jetstream():
             uri = f'at://{msg["did"]}/{commit["collection"]}/{commit["rkey"]}'
             for val in values:
                 if PROD and val not in KNOWN_LABELS:
-                    error_reporting_client.report(f'new label! {val} {uri} {cid}')
+                    error_reporting_client.report(f'new label! {val} {uri} {commit["cid"]} {msg["time_us"]}')
                 label = {
                     'ver': 1,
                     'src': msg['did'],
@@ -118,7 +118,7 @@ def jetstream():
                 arroba.util.sign(label, privkey)
                 labels['labels'].append(label)
 
-            logger.info(f'emitting {len(labels["labels"])} to {len(subscribers)} subscribers for {uri} ')
+            logger.info(f'emitting {len(labels["labels"])} labels to {len(subscribers)} subscribers for {uri} ')
             for sub in subscribers:
                 sub.put(labels)
 
@@ -127,7 +127,9 @@ def jetstream():
 
         except BaseException as err:
             if PROD:
-                error_reporting_client.report_error(msg=None, exception=True)
+                error_reporting_client.report_exception()
+            else:
+                raise
 
 
 @xrpc_server.method('com.atproto.label.subscribeLabels')
