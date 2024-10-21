@@ -43,11 +43,15 @@ KNOWN_LABELS = [
     'bridged-from-bridgy-fed-web',
 ]
 
+# https://cloud.google.com/appengine/docs/flexible/python/runtime#environment_variables
+PROD = 'GAE_INSTANCE' in os.environ
+
 logging_client = google.cloud.logging.Client()
 logging_client.setup_logging(log_level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-error_reporting_client = error_reporting.Client()
+if not PROD:
+    error_reporting_client = error_reporting.Client()
 
 logger.info('Loading #atproto_label private key from privkey.atproto_label.pem')
 with open('privkey.atproto_label.pem', 'rb') as f:
@@ -96,7 +100,7 @@ def jetstream():
             }
             uri = f'at://{msg["did"]}/{commit["collection"]}/{commit["rkey"]}'
             for val in values:
-                if val not in KNOWN_LABELS:
+                if PROD and val not in KNOWN_LABELS:
                     error_reporting_client.report(f'new label! {val} {uri} {cid}')
                 label = {
                     'ver': 1,

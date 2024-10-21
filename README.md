@@ -52,4 +52,4 @@ License: This project is placed in the public domain. You may also use it under 
 
 ### Declaration record
 
-The [labeler declaration record](https://docs.bsky.app/docs/advanced-guides/moderation#labeler-declarations) is `at://did:plc:4wgmwsq4t3tg55ffl3r7ocec/app.bsky.labeler.service/self'. To add a new label value definition to it, run `npx @skyware/labeler add`. [Docs.](https://skyware.js.org/guides/labeler/introduction/getting-started/)
+The [labeler declaration record](https://docs.bsky.app/docs/advanced-guides/moderation#labeler-declarations) is `at://did:plc:4wgmwsq4t3tg55ffl3r7ocec/app.bsky.labeler.service/self`. To add a new label value definition to it, run `npx @skyware/labeler add`. [Docs.](https://skyware.js.org/guides/labeler/introduction/getting-started/)
