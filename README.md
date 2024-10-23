@@ -2,9 +2,10 @@
 
 NOT CURRENTLY RUNNING.
 
-[bsky.app/profile/self-labeler.snarfed.org](https://bsky.app/profile/self-labeler.snarfed.org) (`did:plc:4wgmwsq4t3tg55ffl3r7ocec`)
-
 A [Bluesky](https://bsky.social/)/[AT Protocol](https://atproto.com/) [labeler aka mod service](https://bsky.social/about/blog/4-13-2023-moderation) that emits custom [self-labels](https://atproto.com/specs/label#self-labels-in-records) (except [global labels](https://docs.bsky.app/docs/advanced-guides/moderation#global-label-values)) that already exist inside records.
+
+[bsky.app/profile/self-labeler.snarfed.org](https://bsky.app/profile/self-labeler.snarfed.org)
+[`did:plc:4wgmwsq4t3tg55ffl3r7ocec`](https://web.plc.directory/did/did:plc:4wgmwsq4t3tg55ffl3r7ocec)
 
 Apart from the [global labels](https://docs.bsky.app/docs/advanced-guides/moderation#global-label-values) built into [bsky.app](https://bsky.app/), other custom self-labels are often not displayed or handled by clients. This surfaces those labels and makes them visible.
 
@@ -17,7 +18,7 @@ License: This project is placed in the public domain. You may also use it under 
 
 * Make a new Bluesky account.
 * Convert it to a labeler repo by adding an `#atproto_labeler` service endpoint and `#atproto_label` signing key:
-  * `npm install [@skyware/labeler](https://github.com/skyware-js/labeler)`
+  * `npm install @skyware/labeler`
   * `npx @skyware/labeler setup`
 * Convert the base64 raw bytes private key that `@skyware/labeler setup` prints into PEM:
     ```
