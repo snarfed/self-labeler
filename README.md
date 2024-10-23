@@ -1,5 +1,7 @@
 # self-labeler
 
+NOT CURRENTLY RUNNING.
+
 [bsky.app/profile/self-labeler.snarfed.org](https://bsky.app/profile/self-labeler.snarfed.org) (`did:plc:4wgmwsq4t3tg55ffl3r7ocec`)
 
 A [Bluesky](https://bsky.social/)/[AT Protocol](https://atproto.com/) [labeler aka mod service](https://bsky.social/about/blog/4-13-2023-moderation) that emits custom [self-labels](https://atproto.com/specs/label#self-labels-in-records) (except [global labels](https://docs.bsky.app/docs/advanced-guides/moderation#global-label-values)) that already exist inside records.
