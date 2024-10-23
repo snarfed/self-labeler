@@ -85,7 +85,8 @@ def jetstream():
     host = os.environ['JETSTREAM_HOST']
     logger.info(f'connecting to jetstream at {host}')
 
-    ws = simple_websocket.Client(f'wss://{host}/subscribe?wantedCollections=app.bsky.feed.post&wantedCollections=app.bsky.actor.profile')
+    jetstream_url = f'wss://{host}/subscribe?wantedCollections=app.bsky.feed.post&wantedCollections=app.bsky.actor.profile'
+    ws = simple_websocket.Client(jetstream_url)
     while True:
         try:
             msg = json.loads(ws.receive())
@@ -130,9 +131,11 @@ def jetstream():
 
         except simple_websocket.ConnectionClosed as cc:
             logger.info(f'reconnecting after jetstream disconnect: {cc}')
+            ws = simple_websocket.Client(jetstream_url)
 
         except BaseException as err:
             if PROD:
+                # TODO: maybe reconnect?
                 error_reporting_client.report_exception()
             else:
                 raise
