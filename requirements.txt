@@ -34,7 +34,7 @@ h11==0.14.0
 idna==3.10
 importlib-metadata==8.4.0
 iterators==0.2.0
-Jinja2==3.1.4
+Jinja2==3.1.5
 lexrpc==1.0
 libipld==1.2.3
 MarkupSafe==3.0.2
