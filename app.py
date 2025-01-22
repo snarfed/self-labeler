@@ -8,6 +8,7 @@ https://github.com/bluesky-social/jetstream
 
 Example command line:
 websocat 'wss://jetstream2.us-east.bsky.network/subscribe?wantedCollections=app.bsky.feed.post'
+websocat ws://localhost:8080/xrpc/com.atproto.label.subscribeLabels
 """
 from datetime import datetime, timezone
 import json
@@ -26,6 +27,8 @@ import google.cloud.logging
 import lexrpc.flask_server
 import lexrpc.server
 import simple_websocket
+
+LABELER_DID = 'did:plc:4wgmwsq4t3tg55ffl3r7ocec'
 
 # https://docs.bsky.app/docs/advanced-guides/moderation#global-label-values
 GLOBAL_LABELS = [
@@ -116,7 +119,7 @@ def jetstream():
                         logger.warning(log)
                 label = {
                     'ver': 1,
-                    'src': msg['did'],
+                    'src': LABELER_DID,
                     'uri': uri,
                     'cid': commit['cid'],
                     'val': val,

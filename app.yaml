@@ -1,8 +1,8 @@
 # https://cloud.google.com/appengine/docs/flexible/reference/app-yaml?tab=python
 #
-# gcloud -q app deploy --project bridgy-federated hub.yaml
+# gcloud -q app deploy --project self-labeler app.yaml
 
-# application: bridgy-federated
+# application: self-labeler
 
 service: default
 env: flex
