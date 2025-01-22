@@ -46,6 +46,7 @@ GLOBAL_LABELS = [
 KNOWN_LABELS = [
     'bridged-from-bridgy-fed-activitypub',
     'bridged-from-bridgy-fed-web',
+    'Food',
 ]
 
 # https://cloud.google.com/appengine/docs/flexible/python/runtime#environment_variables
