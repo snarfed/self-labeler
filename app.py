@@ -44,6 +44,7 @@ GLOBAL_LABELS = [
 ]
 
 KNOWN_LABELS = [
+    '!this-is-a-funny-test-account',
     'Adult',
     'bridged-from-bridgy-fed-activitypub',
     'bridged-from-bridgy-fed-web',
