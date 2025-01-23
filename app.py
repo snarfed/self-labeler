@@ -44,6 +44,7 @@ GLOBAL_LABELS = [
 ]
 
 KNOWN_LABELS = [
+    'Adult',
     'bridged-from-bridgy-fed-activitypub',
     'bridged-from-bridgy-fed-web',
     'Food',
