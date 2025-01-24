@@ -48,7 +48,12 @@ KNOWN_LABELS = [
     'Adult',
     'bridged-from-bridgy-fed-activitypub',
     'bridged-from-bridgy-fed-web',
+    'Distressing and upsetting (Southport Stabbings)',
+    'dm',
+    'Emetophobia',
     'Food',
+    'gbf-wiki-admin',
+    'Test',
 ]
 
 # https://cloud.google.com/appengine/docs/flexible/python/runtime#environment_variables
