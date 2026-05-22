@@ -1,9 +1,11 @@
 # self-labeler
 
+_**Archived, no longer running.** This codebase is functional, but the idea itself doesn't really work. [ATProto only allows self-labeling with a small set of fixed global labels](https://github.com/bluesky-social/atproto/discussions/2885#discussioncomment-11009285), not arbitrary user-defined labels, so this labeler is aimed in the wrong direction. Feel free to use it as a minimal example labeler though!_
+
 A [Bluesky](https://bsky.social/)/[AT Protocol](https://atproto.com/) [labeler aka mod service](https://bsky.social/about/blog/4-13-2023-moderation) that emits custom [self-labels](https://atproto.com/specs/label#self-labels-in-records) (except [global labels](https://docs.bsky.app/docs/advanced-guides/moderation#global-label-values)) that already exist inside records.
 
-[bsky.app/profile/self-labeler.snarfed.org](https://bsky.app/profile/self-labeler.snarfed.org)
-[`did:plc:4wgmwsq4t3tg55ffl3r7ocec`](https://web.plc.directory/did/did:plc:4wgmwsq4t3tg55ffl3r7ocec)
+~~[bsky.app/profile/self-labeler.snarfed.org](https://bsky.app/profile/self-labeler.snarfed.org)~~
+~~[`did:plc:4wgmwsq4t3tg55ffl3r7ocec`](https://web.plc.directory/did/did:plc:4wgmwsq4t3tg55ffl3r7ocec)~~
 
 Apart from the [global labels](https://docs.bsky.app/docs/advanced-guides/moderation#global-label-values) built into [bsky.app](https://bsky.app/), other custom self-labels are often not displayed or handled by clients. This surfaces those labels and makes them visible.
 
